@@ -22,7 +22,7 @@ void setup() {
   
   Serial.begin(9600);  
   
-  pinMode(pinIRd,INPUT);  กำหนดขา infared ให้เป็น input
+  pinMode(pinIRd,INPUT);  //กำหนดขา infared ให้เป็น input
 
   lcd.init(); // สั่งให้ LCD เริ่มทำงาน
   lcd.init();
