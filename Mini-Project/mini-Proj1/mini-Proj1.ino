@@ -12,7 +12,7 @@
 */
 #define relayPin 13 // กำหนดขาของ relay
 
-int maximumRange = 200; // กำหนดระยะสูงสุด หน่วย cm
+int maximumRange = 10; // กำหนดระยะสูงสุด หน่วย cm
 int minimumRange = 0; // กำหนดระยะต่ำสุด หน่วย cm
 long duration, distance; 
 /* 
@@ -21,8 +21,8 @@ duration คือจำนวนครั้งที่ได้รับส�
 distance คือระยะทางที่คำนวนได้
 */
 
-unsigned long prev=0;  // เริ่มจับเวลา
-unsigned long interval=5000;  // กำหนดระยะเวลาเพื่อคอยปิด
+//unsigned long prev=0;  // เริ่มจับเวลา
+//unsigned long interval=5000;  // กำหนดระยะเวลาเพื่อคอยปิด
 
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
@@ -41,7 +41,11 @@ void setup() {
 }
 
 void loop() {
-  lcd.clear();
+//  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("                ");
+  lcd.setCursor(0,1);
+  lcd.print("                ");
   digitalWrite(trigPin, LOW); //ปิดการส่งสัญญาน Ultrasonic
   delayMicroseconds(2); // ไมโครวินาที คือ 1 วินาที มี 1,000,000 ไมโครวินาที
   digitalWrite(trigPin, HIGH);  //เปิดการส่งสัญญาน Ultrasonic
@@ -63,22 +67,23 @@ void loop() {
   if (distance >= maximumRange || distance <= minimumRange) {
     Serial.println("Out of Range");  //แสดงข้อความเมื่ออยู่นอกระยะ
     state_relay = 0;
-    prev = millis();  // เริ่มจับเวลา millis เป็น function ที่คืนค่าเวลา ณ ปัจจุบัน
+    digitalWrite(relayPin, LOW);
+//    prev = millis();  // เริ่มจับเวลา millis เป็น function ที่คืนค่าเวลา ณ ปัจจุบัน
   }
   else {
     Serial.println(String(distance) + " cm" + "\t" + "In Range");  //แสดงค่าระยะทาง
     digitalWrite(relayPin, HIGH); //สั่ง relay เปิด
     lcd.setCursor(0,1); // กำหนดตำแหน่งเริ่มต้นของการแสดงข้อความ ตัวอักษรที่,บรรทัดที่ โดยตำแหน่งแรกคือ 0
     lcd.print("Open");  // แสดงค่า ณ ตำแหน่งที่กำหนด
-    state_relay = 1;
+//    state_relay = 1;
   }
     
-  unsigned long curr = millis();  // รับค่าเวลาปัจจุบัน
-  if (state_relay == 0) {
-    if (curr - prev >= interval){
-      digitalWrite(relayPin, LOW);  // สั่ง relay ปิด
-    }else{}
-  } else {}
+//  unsigned long curr = millis();  // รับค่าเวลาปัจจุบัน
+//  if (state_relay == 0) {
+//    if (curr - prev >= interval){
+//      digitalWrite(relayPin, LOW);  // สั่ง relay ปิด
+//    }else{}
+//  } else {}
 
   lcd.setCursor(0,0); 
   lcd.print("Distant "+ String(distance)+" cm");
